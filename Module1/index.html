@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CivicHub — Local Community Event Portal</title>
+
+  <!-- Google Fonts (CSS3 Exercise 5) -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- External CSS (CSS3 Exercise 1) -->
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Internal/Embedded style (CSS3 Exercise 1) -->
+  <style>
+    /* Embedded: body background color */
+    body { background-color: #f5f7fa; }
+  </style>
+</head>
+
+<body onbeforeunload="return warnBeforeLeave()">
+
+<!-- ======================== NAVIGATION ======================== -->
+<nav id="mainNav">
+  <a href="#home" class="nav-brand">
+    <span class="nav-brand-dot"></span>CivicHub
+  </a>
+
+  <!-- Exercise HTML5 #2: anchor tags with IDs -->
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#events">Events</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#feedback">Feedback</a></li>
+    <li><a href="#bulletin">Bulletin</a></li>
+    <li><a href="#video">Video</a></li>
+    <!-- Exercise HTML5 #2: external link -->
+    <li><a href="help.html" target="_blank">Help ↗</a></li>
+    <li><a href="#register" class="nav-cta">Register</a></li>
+  </ul>
+
+  <button class="nav-toggle" onclick="toggleNav()" aria-label="Toggle menu">&#9776;</button>
+</nav>
+
+<!-- ======================== MAIN ======================== -->
+<main>
+
+  <!-- -------- HOME -------- -->
+  <section id="home" class="hero-section">
+    <!-- Exercise HTML5 #3: div with ID, inline span, .highlight class -->
+    <div id="welcomeBanner">
+      <span class="section-label">Welcome</span>
+      <h1>Your city's events,<br><span class="hero-accent highlight">all in one place.</span></h1>
+
+      <p>Discover, register, and engage with community events happening near you — from music nights to workshops and sports days.</p>
+
+      <!-- Inline style for special offer (HTML5 Exercise 3) -->
+      <div class="hero-offer">
+        <span style="color:#d97706; font-weight:700;">Special Offer:</span>
+        <span style="color:#92400e;">First-time registrants get free access this month!</span>
+      </div>
+
+      <div class="hero-cta">
+        <a href="#events" class="cta-button">Explore Events →</a>
+        <a href="#register" class="cta-button cta-secondary">Register Now</a>
+      </div>
+
+      <!-- Geolocation (HTML5 Exercise 9) -->
+      <button class="geo-btn" onclick="findNearbyEvents()">Find Nearby Events</button>
+      <p id="geoOutput" class="geo-output"></p>
+    </div>
+  </section>
+
+  <!-- -------- EVENTS -------- -->
+  <section id="events">
+    <div class="section-header">
+      <span class="section-label">Browse</span>
+      <h2>Upcoming Events</h2>
+      <p>Filter by category or search by name to find your perfect event.</p>
+      <div class="filter-bar">
+        <!-- Exercise JS#8: onchange filter -->
+        <select id="categoryFilter" onchange="filterByCategory()">
+          <option value="all">All Categories</option>
+          <option value="music">Music</option>
+          <option value="workshop">Workshop</option>
+          <option value="sports">Sports</option>
+          <option value="culture">Culture</option>
+        </select>
+        <!-- Exercise JS#8: keydown search -->
+        <input type="text" id="searchInput" placeholder="Search events..." onkeydown="quickSearch(event)" />
+      </div>
+    </div>
+    <!-- Exercise JS#7: events rendered dynamically -->
+    <div id="eventContainer" class="event-grid"></div>
+  </section>
+
+  <!-- -------- GALLERY -------- -->
+  <section id="gallery">
+    <div class="section-header">
+      <span class="section-label">Memories</span>
+      <h2>Photo Gallery</h2>
+      <p>Double-click any photo to enlarge it.</p>
+    </div>
+    <!-- Exercise HTML5 #4: table with images -->
+    <div class="table-wrapper">
+      <table class="gallery-table">
+        <tbody>
+          <tr>
+            <td>
+              <!-- Exercise HTML5 #6: ondblclick enlarge -->
+              <img src="https://picsum.photos/seed/music/300/190" alt="Music Night event" title="Annual Music Night 2025" class="gallery-img" ondblclick="enlargeImage(this)" />
+              <p class="img-caption">Music Night</p>
+            </td>
+            <td>
+              <img src="https://picsum.photos/seed/baking/300/190" alt="Baking workshop" title="Baking Workshop 2025" class="gallery-img" ondblclick="enlargeImage(this)" />
+              <p class="img-caption">Baking Workshop</p>
+            </td>
+            <td>
+              <img src="https://picsum.photos/seed/sports/300/190" alt="Sports day" title="Community Sports Day 2025" class="gallery-img" ondblclick="enlargeImage(this)" />
+              <p class="img-caption">Sports Day</p>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <img src="https://picsum.photos/seed/culture/300/190" alt="Culture fest" title="Culture Festival 2025" class="gallery-img" ondblclick="enlargeImage(this)" />
+              <p class="img-caption">Culture Fest</p>
+            </td>
+            <td>
+              <img src="https://picsum.photos/seed/yoga/300/190" alt="Yoga in the park" title="Yoga in the Park 2025" class="gallery-img" ondblclick="enlargeImage(this)" />
+              <p class="img-caption">Yoga in the Park</p>
+            </td>
+            <td>
+              <img src="https://picsum.photos/seed/food/300/190" alt="Food fair" title="Community Food Fair 2025" class="gallery-img" ondblclick="enlargeImage(this)" />
+              <p class="img-caption">Food Fair</p>
+            </td>
+          </tr>
+        </tbody>
+        <caption>Highlights from past community events — double-click to enlarge</caption>
+      </table>
+    </div>
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+      <img id="lightboxImg" src="" alt="Enlarged view" />
+      <span class="lightbox-close">✕ Click anywhere to close</span>
+    </div>
+  </section>
+
+  <!-- -------- REGISTER -------- -->
+  <section id="register">
+    <div class="section-header">
+      <span class="section-label">Sign Up</span>
+      <h2>Event Registration</h2>
+      <p>Fill in your details to secure your spot at any upcoming event.</p>
+    </div>
+    <!-- Exercise HTML5 #5: full form -->
+    <form id="registrationForm" onsubmit="handleRegistration(event)" novalidate>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="fullName">Full Name *</label>
+          <!-- autofocus (HTML5 Exercise 5) -->
+          <input type="text" id="fullName" name="fullName" placeholder="Jane Doe" required autofocus />
+          <span class="field-error" id="nameError"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address *</label>
+          <input type="email" id="email" name="email" placeholder="jane@example.com" required />
+          <span class="field-error" id="emailError"></span>
+        </div>
+
+        <!-- HTML5 Exercise 6: onblur phone validation -->
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone" placeholder="10-digit number" onblur="validatePhone(this)" />
+          <span class="field-error" id="phoneError"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="eventDate">Preferred Date *</label>
+          <input type="date" id="eventDate" name="eventDate" required />
+        </div>
+
+        <!-- HTML5 Exercise 6: onchange fee display -->
+        <div class="form-group">
+          <label for="eventType">Event Type *</label>
+          <select id="eventType" name="eventType" required onchange="showEventFee(this); savePreference(this)">
+            <option value="">— Select Event —</option>
+            <option value="music"    data-fee="Free">Music Night</option>
+            <option value="workshop" data-fee="₹150">Baking Workshop</option>
+            <option value="sports"   data-fee="Free">Sports Day</option>
+            <option value="culture"  data-fee="₹100">Culture Fest</option>
+            <option value="yoga"     data-fee="Free">Yoga in the Park</option>
+          </select>
+          <span id="eventFeeDisplay" class="fee-badge"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="prefDisplay2">Saved Preference</label>
+          <p id="prefDisplay" class="pref-display" style="padding:0.5rem 0;border:none;box-shadow:none;background:none;font-size:0.85rem;">None yet.</p>
+        </div>
+
+        <div class="form-group full-width">
+          <label for="message">Additional Message</label>
+          <textarea id="message" name="message" placeholder="Any special requests or notes..." rows="4"></textarea>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <!-- HTML5 Exercise 6: onclick -->
+        <button type="submit" id="submitBtn" onclick="confirmSubmit()" class="cta-button">Register Now</button>
+        <button type="button" class="btn-secondary" onclick="clearPreferences()">Clear Preferences</button>
+      </div>
+
+      <!-- HTML5 Exercise 5: output element -->
+      <output id="formOutput" class="form-output" style="display:none"></output>
+    </form>
+  </section>
+
+  <!-- -------- FEEDBACK -------- -->
+  <section id="feedback">
+    <div class="section-header">
+      <span class="section-label">Your Voice</span>
+      <h2>Share Feedback</h2>
+      <p>We'd love to hear what you think about our events.</p>
+    </div>
+    <div class="feedback-container">
+      <div class="form-group">
+        <label for="feedbackText">Your Feedback</label>
+        <!-- HTML5 Exercise 6: onkeyup character counter -->
+        <textarea id="feedbackText" rows="5" placeholder="Tell us what you think..." onkeyup="countChars(this)"></textarea>
+        <span id="charCount" class="char-count">0 / 500 characters</span>
+      </div>
+      <div class="form-group">
+        <label for="feedbackCategory">Rate This Event</label>
+        <select id="feedbackCategory" onchange="showFeedbackCategory(this)">
+          <option value="">— Select Rating —</option>
+          <option value="excellent">⭐⭐⭐⭐⭐ Excellent</option>
+          <option value="good">⭐⭐⭐⭐ Good</option>
+          <option value="average">⭐⭐⭐ Average</option>
+          <option value="poor">⭐⭐ Poor</option>
+        </select>
+        <span id="feedbackRatingDisplay" class="fee-badge"></span>
+      </div>
+      <button class="cta-button" onclick="submitFeedback()" style="align-self:flex-start">Submit Feedback</button>
+      <p id="feedbackOutput" class="form-output" style="display:none"></p>
+    </div>
+  </section>
+
+  <!-- -------- VIDEO -------- -->
+  <section id="video">
+    <div class="section-header">
+      <span class="section-label">Watch</span>
+      <h2>Event Promo Video</h2>
+      <p>Get a sneak peek at what's coming up in our community.</p>
+    </div>
+    <!-- HTML5 Exercise 7: video + media events -->
+    <div class="video-wrapper">
+      <video id="promoVideo" controls width="100%"
+             oncanplay="videoReady()"
+             onplay="videoPlaying()"
+             onpause="videoPaused()">
+        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+      <p id="videoStatus" class="video-status">⏳ Loading video...</p>
+    </div>
+  </section>
+
+  <!-- -------- BULLETIN -------- -->
+  <section id="bulletin">
+    <div class="section-header">
+      <span class="section-label">News</span>
+      <h2>Community Bulletin</h2>
+      <p>Stay informed with the latest updates from your neighbourhood.</p>
+    </div>
+    <!-- CSS3 Exercise 9: multi-column -->
+    <div class="bulletin-columns">
+      <article>
+        <h3>Road Closure Notice</h3>
+        <p>Main Street will be closed June 10–12 for the Annual Parade. Use Oak Avenue as the alternate route. City buses will be rerouted during this period.</p>
+      </article>
+      <article>
+        <h3>Park Renovation Update</h3>
+        <p>Riverside Park's playground is under renovation. Completion expected by July 15. The walking trail remains fully open. Thank you for your patience.</p>
+      </article>
+      <article>
+        <h3>Volunteer Drive Open</h3>
+        <p>We need enthusiastic volunteers for our Summer Festival — event coordination, hospitality, and logistics. Sign up at the community center before June 5.</p>
+      </article>
+      <article>
+        <h3>Library Extended Hours</h3>
+        <p>The Central Library is now open until 9 PM on weekdays throughout June. Special children's reading programs every Saturday morning. All welcome!</p>
+      </article>
+    </div>
+  </section>
+
+</main>
+
+<!-- ======================== FOOTER ======================== -->
+<footer id="mainFooter">
+  <div class="footer-grid">
+    <div>
+      <h4>CivicHub Portal</h4>
+      <p>Connecting communities, one event at a time. Built for residents, run by the city council.</p>
+    </div>
+    <div>
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#events">Events</a></li>
+        <li><a href="#register">Register</a></li>
+        <li><a href="#feedback">Feedback</a></li>
+        <li><a href="help.html" target="_blank">Help ↗</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Contact Us</h4>
+      <p>📧 info@civichub.gov</p>
+      <p>📞 1800-000-CIVIC</p>
+      <p>🕘 Mon – Fri, 9 AM – 5 PM</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 CivicHub — Local Community Event Portal. All rights reserved.</p>
+  </div>
+</footer>
+
+<!-- External JS (JS Exercise 1) -->
+<script src="main.js"></script>
+</body>
+</html>
