@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<!-- Exercise 1: HTML5 Base Template -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CityConnect – Local Community Event Portal</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ── CSS Variables ── */
+    :root {
+      --bg:       #0d0f14;
+      --surface:  #161922;
+      --card:     #1e2330;
+      --border:   #2a3045;
+      --accent:   #f4c542;
+      --accent2:  #e8855a;
+      --text:     #e8eaf0;
+      --muted:    #7a839a;
+      --blue:     #4a90d9;
+      --green:    #4ecb84;
+      --red:      #e05555;
+      --radius:   12px;
+      --shadow:   0 8px 32px rgba(0,0,0,0.45);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      scroll-behavior: smooth;
+    }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* ── Navigation (Exercise 2) ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(13,15,20,0.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; height: 64px;
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem; color: var(--accent);
+      letter-spacing: 0.02em;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--muted); text-decoration: none;
+      font-size: 0.9rem; font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+    .nav-ext {
+      color: var(--accent2); text-decoration: none;
+      font-size: 0.85rem; font-weight: 500;
+      border: 1px solid var(--accent2); padding: 6px 14px; border-radius: 20px;
+      transition: all 0.2s;
+    }
+    .nav-ext:hover { background: var(--accent2); color: #fff; }
+
+    /* ── Sections ── */
+    section {
+      padding: 5rem 2rem;
+      max-width: 1100px; margin: 0 auto;
+    }
+    .section-label {
+      font-size: 0.75rem; font-weight: 500; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem;
+    }
+    h1, h2 {
+      font-family: 'Playfair Display', serif;
+    }
+    h2 { font-size: 2.2rem; margin-bottom: 1.5rem; }
+
+    /* ── Exercise 3: Welcome Banner ── */
+    #welcomeBanner {
+      background: linear-gradient(135deg, #1a3a6b 0%, #1e4a8a 100%);
+      border: 1px solid #2a5aaa;
+      border-radius: var(--radius);
+      padding: 2.5rem 2rem;
+      margin-bottom: 4rem;
+      position: relative; overflow: hidden;
+    }
+    #welcomeBanner::before {
+      content: '';
+      position: absolute; top: -40px; right: -40px;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(74,144,217,0.25) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    #welcomeBanner h1 {
+      font-size: 2.4rem; margin-bottom: 0.5rem;
+    }
+    .highlight {
+      background: rgba(244,197,66,0.18);
+      border-left: 3px solid var(--accent);
+      padding: 0.25rem 0.75rem;
+      border-radius: 4px;
+      display: inline-block;
+    }
+
+    /* ── Divider ── */
+    .divider {
+      border: none; border-top: 1px solid var(--border);
+      margin: 0 2rem;
+    }
+
+    /* ── Exercise 4: Image Gallery ── */
+    .gallery-table {
+      width: 100%; border-collapse: separate; border-spacing: 14px;
+      margin-top: 1.5rem;
+    }
+    .gallery-table td { vertical-align: top; }
+    .gallery-table figure {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: transform 0.25s, box-shadow 0.25s;
+      cursor: zoom-in;
+    }
+    .gallery-table figure:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+    .event-img {
+      width: 100%; height: 140px; object-fit: cover;
+      display: block; border-bottom: 1px solid var(--border);
+    }
+    .img-bordered { border: 2px solid var(--accent); }
+    figcaption {
+      font-size: 0.8rem; color: var(--muted);
+      padding: 0.6rem 0.8rem;
+    }
+
+    /* ── Exercise 5: Registration Form ── */
+    #register { background: var(--surface); border-radius: var(--radius); padding: 2.5rem; }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+    }
+    .form-full { grid-column: 1 / -1; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group label {
+      font-size: 0.82rem; font-weight: 500; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      padding: 0.65rem 0.9rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(244,197,66,0.12);
+    }
+    .form-group input.invalid { border-color: var(--red); }
+    .form-group select option { background: var(--card); }
+    textarea { resize: vertical; min-height: 90px; }
+    .char-count { font-size: 0.78rem; color: var(--muted); text-align: right; }
+
+    /* Phone validation message */
+    #phoneError { font-size: 0.8rem; color: var(--red); margin-top: 0.2rem; display: none; }
+
+    /* Fee display */
+    #feeDisplay {
+      margin-top: 0.5rem; font-size: 0.9rem;
+      color: var(--green); font-weight: 500; min-height: 1.4em;
+    }
+
+    /* Buttons */
+    .btn-primary {
+      background: var(--accent);
+      color: #0d0f14;
+      border: none; border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem; font-weight: 700;
+      padding: 0.75rem 2rem;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn-primary:hover { background: #e6b730; }
+    .btn-primary:active { transform: scale(0.97); }
+    .btn-secondary {
+      background: transparent;
+      color: var(--muted); border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem; padding: 0.6rem 1.4rem;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .btn-secondary:hover { border-color: var(--muted); color: var(--text); }
+
+    /* Output confirmation */
+    #confirmOutput {
+      display: block; margin-top: 1rem;
+      background: rgba(78,203,132,0.12);
+      border: 1px solid var(--green);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      color: var(--green);
+      font-size: 0.9rem;
+      min-height: 2.5rem;
+    }
+
+    /* ── Feedback section ── */
+    .feedback-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+    }
+    .feedback-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.4rem;
+    }
+    .feedback-card h3 {
+      font-size: 1rem; margin-bottom: 1rem; color: var(--accent);
+    }
+
+    /* Enlargeable image */
+    #eventThumb {
+      width: 100%; border-radius: 8px; cursor: zoom-in;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    #eventThumb.enlarged {
+      transform: scale(1.35);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+      cursor: zoom-out;
+    }
+
+    /* ── Exercise 7: Video ── */
+    #video video {
+      width: 100%; border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: #000;
+    }
+    #videoStatus {
+      margin-top: 0.75rem;
+      font-size: 0.9rem; color: var(--green);
+      min-height: 1.4em;
+    }
+
+    /* ── Exercise 8: Preferences ── */
+    .pref-row {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      align-items: center; margin-top: 1rem;
+    }
+    #storedPref {
+      padding: 0.5rem 1rem;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 8px; font-size: 0.9rem; color: var(--accent);
+      min-height: 2.2rem;
+    }
+
+    /* ── Exercise 9: Geolocation ── */
+    #geoResult {
+      margin-top: 1rem;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 8px; padding: 1rem;
+      font-size: 0.9rem; color: var(--text);
+      min-height: 3rem;
+    }
+    .coord-item { color: var(--accent); font-weight: 600; }
+
+    /* ── Exercise 10: DevTools hint ── */
+    .devtools-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-left: 4px solid var(--blue);
+      border-radius: var(--radius); padding: 1.5rem;
+      margin-top: 1rem;
+    }
+    .devtools-card code {
+      background: rgba(74,144,217,0.12);
+      color: var(--blue); padding: 2px 6px; border-radius: 4px;
+      font-family: 'Courier New', monospace; font-size: 0.88rem;
+    }
+    .devtools-card ul { margin-top: 0.75rem; padding-left: 1.2rem; }
+    .devtools-card li { margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--muted); }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center; padding: 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted); font-size: 0.85rem;
+    }
+
+    /* ── Tag badges ── */
+    .badge {
+      display: inline-block;
+      font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      background: rgba(244,197,66,0.12); color: var(--accent);
+      border: 1px solid rgba(244,197,66,0.3);
+      padding: 2px 8px; border-radius: 20px;
+      margin-bottom: 0.6rem;
+    }
+
+    @media (max-width: 680px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .feedback-grid { grid-template-columns: 1fr; }
+      .nav-links { gap: 1rem; }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ══════════════════════════════════════════
+     Navigation (Exercise 2)
+══════════════════════════════════════════ -->
+<nav>
+  <span class="nav-logo">🏙 CityConnect</span>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#events">Events</a></li>
+    <li><a href="#register">Register</a></li>
+    <li><a href="#feedback">Feedback</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <!-- External link opens in new tab -->
+  <a href="help.html" target="_blank" class="nav-ext">Help ↗</a>
+</nav>
+
+
+<!-- ══════════════════════════════════════════
+     Main Content
+══════════════════════════════════════════ -->
+<main>
+
+  <!-- ── Section: Home (Exercise 3) ── -->
+  <section id="home">
+
+    <!-- Exercise 3: Welcome Banner with blue background via internal CSS -->
+    <div id="welcomeBanner">
+      <p class="section-label">Welcome back, Resident</p>
+      <h1>Your City.<br>Your Community.</h1>
+      <p style="margin-top:0.75rem; color:#a8c8f0;">
+        Discover local events, register in seconds, and stay connected.
+        <span style="color: red; font-weight: bold;">🎉 Special Offer: Free entry this week!</span>
+      </p>
+      <p class="highlight" style="margin-top:1.2rem;">
+         3 events near you this weekend
+      </p>
+    </div>
+
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── Section: Events & Gallery (Exercise 4) ── -->
+  <section id="events">
+    <div class="badge">Exercise 4</div>
+    <p class="section-label">Community Highlights</p>
+    <h2>Past Event Gallery</h2>
+
+    <!-- Table with 2 rows × 3 columns of images -->
+    <table class="gallery-table">
+      <tr>
+        <td>
+          <figure ondblclick="enlargeImg(this)">
+            <img class="event-img img-bordered"
+                 src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&q=70"
+                 alt="Community Meetup photo" title="Annual Community Meetup 2024">
+            <figcaption>Annual Community Meetup – City Hall, Jan 2024</figcaption>
+          </figure>
+        </td>
+        <td>
+          <figure ondblclick="enlargeImg(this)">
+            <img class="event-img img-bordered"
+                 src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&q=70"
+                 alt="Tech Fair photo" title="Tech & Innovation Fair 2024">
+            <figcaption>Tech & Innovation Fair – Convention Centre, Mar 2024</figcaption>
+          </figure>
+        </td>
+        <td>
+          <figure ondblclick="enlargeImg(this)">
+            <img class="event-img img-bordered"
+                 src="https://images.unsplash.com/photo-1464047736614-af63643285bf?w=400&q=70"
+                 alt="Green City Drive photo" title="Green City Drive 2024">
+            <figcaption>Green City Drive – Riverside Park, Apr 2024</figcaption>
+          </figure>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <figure ondblclick="enlargeImg(this)">
+            <img class="event-img img-bordered"
+                 src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=400&q=70"
+                 alt="Food Festival photo" title="Street Food Festival 2024">
+            <figcaption>Street Food Festival – Main Square, May 2024</figcaption>
+          </figure>
+        </td>
+        <td>
+          <figure ondblclick="enlargeImg(this)">
+            <img class="event-img img-bordered"
+                 src="https://images.unsplash.com/photo-1543269865-cbf427effbad?w=400&q=70"
+                 alt="Youth Sports Day photo" title="Youth Sports Day 2024">
+            <figcaption>Youth Sports Day – Central Stadium, Jun 2024</figcaption>
+          </figure>
+        </td>
+        <td>
+          <figure ondblclick="enlargeImg(this)">
+            <img class="event-img img-bordered"
+                 src="https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=400&q=70"
+                 alt="Music Night photo" title="Summer Music Night 2024">
+            <figcaption>Summer Music Night – Amphitheatre, Jul 2024</figcaption>
+          </figure>
+        </td>
+      </tr>
+    </table>
+    <p style="font-size:0.8rem;color:var(--muted);margin-top:0.75rem;">
+       <em>Double-click any image to enlarge it.</em>
+    </p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── Section: Registration Form (Exercise 5) ── -->
+  <section id="register">
+    <div class="badge">Exercise 5</div>
+    <p class="section-label">Sign Up</p>
+    <h2>Event Registration</h2>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;">
+      <div class="form-grid">
+
+        <!-- Name -->
+        <div class="form-group">
+          <label for="regName">Full Name *</label>
+          <input type="text" id="regName" name="name"
+                 placeholder="Jane Doe"
+                 required autofocus>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label for="regEmail">Email Address *</label>
+          <input type="email" id="regEmail" name="email"
+                 placeholder="jane@example.com" required>
+        </div>
+
+        <!-- Date -->
+        <div class="form-group">
+          <label for="regDate">Event Date *</label>
+          <input type="date" id="regDate" name="date" required>
+        </div>
+
+        <!-- Event Type -->
+        <div class="form-group">
+          <label for="regEvent">Event Type *</label>
+          <select id="regEvent" name="event" required
+                  onchange="showFee(this); savePreference(this);">
+            <option value="">— Select an event —</option>
+            <option value="meetup">Community Meetup – Free</option>
+            <option value="tech">Tech Fair – ₹199</option>
+            <option value="green">Green Drive – Free</option>
+            <option value="food">Food Festival – ₹149</option>
+            <option value="sports">Sports Day – ₹99</option>
+            <option value="music">Music Night – ₹249</option>
+          </select>
+          <div id="feeDisplay"></div>
+        </div>
+
+        <!-- Phone (Exercise 6 – blur validation) -->
+        <div class="form-group">
+          <label for="regPhone">Phone Number</label>
+          <input type="tel" id="regPhone" name="phone"
+                 placeholder="+91 98765 43210"
+                 onblur="validatePhone(this)">
+          <span id="phoneError">⚠ Please enter a valid 10-digit phone number.</span>
+        </div>
+
+        <!-- Message -->
+        <div class="form-group form-full">
+          <label for="regMessage">Message / Special Requests</label>
+          <textarea id="regMessage" name="message"
+                    placeholder="Any dietary needs, accessibility requirements…"
+                    onkeyup="countChars(this)"></textarea>
+          <div class="char-count"><span id="charNum">0</span> / 300 characters</div>
+        </div>
+
+      </div><!-- /form-grid -->
+
+      <div style="display:flex;gap:1rem;align-items:center;margin-top:1.5rem;flex-wrap:wrap;">
+        <button class="btn-primary"
+                onclick="submitRegistration()">Register Now</button>
+        <button class="btn-secondary"
+                onclick="clearForm()">Clear</button>
+      </div>
+
+      <!-- Output element for confirmation (Exercise 5) -->
+      <output id="confirmOutput"></output>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── Section: Feedback / Event Handling (Exercise 6) ── -->
+  <section id="feedback">
+    <div class="badge">Exercise 6</div>
+    <p class="section-label">Share Your Experience</p>
+    <h2>Event Feedback</h2>
+
+    <div class="feedback-grid">
+
+      <!-- Feedback form card -->
+      <div class="feedback-card">
+        <h3>Leave Feedback</h3>
+
+        <div class="form-group" style="margin-bottom:1rem;">
+          <label>Select Event</label>
+          <select onchange="showFee(this)">
+            <option value="">— Pick event to see fee paid —</option>
+            <option value="meetup">Community Meetup – Free</option>
+            <option value="tech">Tech Fair – ₹199</option>
+            <option value="food">Food Festival – ₹149</option>
+            <option value="sports">Sports Day – ₹99</option>
+            <option value="music">Music Night – ₹249</option>
+          </select>
+          <div id="feedbackFeeDisplay" style="margin-top:0.4rem;color:var(--green);font-size:0.9rem;min-height:1.4em;"></div>
+        </div>
+
+        <div class="form-group" style="margin-bottom:1rem;">
+          <label for="fbPhone">Phone (blur to validate)</label>
+          <input type="tel" id="fbPhone" placeholder="10-digit number"
+                 onblur="validatePhone(this)">
+        </div>
+
+        <div class="form-group" style="margin-bottom:1rem;">
+          <label for="fbText">Your Feedback</label>
+          <textarea id="fbText" rows="4"
+                    placeholder="Write your thoughts…"
+                    onkeyup="countChars(this, 'fbCharNum')"></textarea>
+          <div class="char-count"><span id="fbCharNum">0</span> / 300 characters</div>
+        </div>
+
+        <button class="btn-primary"
+                onclick="submitFeedback()">Submit Feedback</button>
+        <div id="feedbackResult" style="margin-top:0.75rem;font-size:0.9rem;color:var(--green);min-height:1.2em;"></div>
+      </div>
+
+      <!-- Image enlarge card -->
+      <div class="feedback-card">
+        <h3>Event Snapshot</h3>
+        <p style="font-size:0.82rem;color:var(--muted);margin-bottom:0.75rem;">
+          Double-click the image to enlarge / restore.
+        </p>
+        <img id="eventThumb"
+             src="https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=600&q=70"
+             alt="Event snapshot"
+             ondblclick="toggleEnlarge(this)">
+        <p style="font-size:0.78rem;color:var(--muted);margin-top:0.5rem;">
+          Summer Music Night 2024
+        </p>
+      </div>
+
+    </div><!-- /feedback-grid -->
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── Section: Video Invite (Exercise 7) ── -->
+  <section id="video">
+    <div class="badge">Exercise 7</div>
+    <p class="section-label">Event Promo</p>
+    <h2>Watch the Invite</h2>
+
+    <video controls
+           oncanplay="videoReady()"
+           onended="videoEnded()">
+      <!--
+        Replace the src below with your own .mp4 file.
+        Using a royalty-free sample from the web for demo:
+      -->
+      <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+      Your browser does not support the HTML5 video element.
+    </video>
+    <div id="videoStatus">Loading video…</div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── Section: Preferences (Exercise 8) ── -->
+  <section id="preferences">
+    <div class="badge">Exercise 8</div>
+    <p class="section-label">Personalise</p>
+    <h2>Your Preferences</h2>
+
+    <p style="color:var(--muted);font-size:0.9rem;">
+      Your last selected event type is saved automatically in
+      <code style="color:var(--blue);background:rgba(74,144,217,0.1);padding:2px 6px;border-radius:4px;">localStorage</code>.
+      It will be pre-selected on your next visit.
+    </p>
+
+    <div class="pref-row">
+      <div id="storedPref">No saved preference yet.</div>
+      <button class="btn-secondary" onclick="clearPreferences()">🗑 Clear Preferences</button>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── Section: Geolocation (Exercise 9) ── -->
+  <section id="contact">
+    <div class="badge">Exercise 9</div>
+    <p class="section-label">Find Events Near You</p>
+    <h2>Event Locator</h2>
+
+    <p style="color:var(--muted);font-size:0.9rem;margin-bottom:1.2rem;">
+      Allow location access to discover events closest to you.
+    </p>
+    <button class="btn-primary" onclick="findNearbyEvents()">
+      Find Nearby Events
+    </button>
+    <div id="geoResult">Click the button above to detect your location.</div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ── Section: DevTools Tips (Exercise 10) ── -->
+  <section id="devtools">
+    <div class="badge">Exercise 10</div>
+    <p class="section-label">Developer Notes</p>
+    <h2>Debugging with Chrome DevTools</h2>
+
+    <div class="devtools-card">
+      <p style="color:var(--muted);font-size:0.9rem;">
+        This portal demonstrates several debugging hooks. Open
+        <strong>Chrome DevTools</strong> (<kbd>F12</kbd>) to explore:
+      </p>
+      <ul>
+        <li><strong>Elements tab</strong> – Inspect &amp; live-edit any CSS property.</li>
+        <li><strong>Console tab</strong> – All events log with <code>console.log()</code> — try clicking buttons.</li>
+        <li><strong>Sources tab</strong> – Add breakpoints inside any JS function (e.g. <code>submitRegistration</code>).</li>
+        <li><strong>Application tab</strong> – View <code>localStorage</code> &amp; <code>sessionStorage</code> values live.</li>
+        <li><strong>Network tab</strong> – Watch the geolocation API call and video load events.</li>
+      </ul>
+      <p style="margin-top:1rem;font-size:0.85rem;color:var(--muted);">
+        Console logs are active – open the Console and interact with the page to see them.
+      </p>
+      <button class="btn-secondary" style="margin-top:1rem;"
+              onclick="runDebugDemo()">Run Console Demo</button>
+    </div>
+  </section>
+
+</main><!-- /main -->
+
+
+<!-- ══════════════════════════════════════════
+     Footer
+══════════════════════════════════════════ -->
+<footer>
+  <p>© 2024 CityConnect – Local Community Event Portal &nbsp;|&nbsp;
+     Built for HTML5 Module Exercises</p>
+</footer>
+
+
+<!-- ══════════════════════════════════════════
+     JavaScript (Exercises 6–10)
+══════════════════════════════════════════ -->
+<script>
+
+/* ─────────────────────────────────────────
+   Exercise 5 – Form Submission & Output
+───────────────────────────────────────── */
+function submitRegistration() {
+  const name    = document.getElementById('regName').value.trim();
+  const email   = document.getElementById('regEmail').value.trim();
+  const date    = document.getElementById('regDate').value;
+  const event   = document.getElementById('regEvent').value;
+  const output  = document.getElementById('confirmOutput');
+
+  console.log('[Registration] Submit clicked', { name, email, date, event });
+
+  if (!name || !email || !date || !event) {
+    output.textContent = '⚠ Please fill in all required fields.';
+    output.style.color = 'var(--red)';
+    output.style.borderColor = 'var(--red)';
+    output.style.background  = 'rgba(224,85,85,0.08)';
+    return;
+  }
+
+  output.textContent =
+    `Thank you, ${name}! You're registered for "${event}" on ${date}. Confirmation sent to ${email}.`;
+  output.style.color       = 'var(--green)';
+  output.style.borderColor = 'var(--green)';
+  output.style.background  = 'rgba(78,203,132,0.08)';
+}
+
+function clearForm() {
+  ['regName','regEmail','regDate','regPhone','regMessage'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('regEvent').selectedIndex = 0;
+  document.getElementById('confirmOutput').textContent = '';
+  document.getElementById('feeDisplay').textContent = '';
+  document.getElementById('charNum').textContent = '0';
+  console.log('[Form] Cleared');
+}
+
+
+/* ─────────────────────────────────────────
+   Exercise 6 – Event Handlers
+
+   onblur  → phone validation
+   onchange→ fee display  (also called from Exercise 5 dropdown)
+   onclick → submit confirm (handled in submitRegistration/submitFeedback)
+   ondblclick → image enlarge (toggleEnlarge)
+   onkeyup → char counter
+───────────────────────────────────────── */
+
+/* onblur – phone validation */
+function validatePhone(input) {
+  const digits = input.value.replace(/\D/g,'');
+  const errEl  = document.getElementById('phoneError');
+
+  if (input.value === '') {
+    input.classList.remove('invalid');
+    if (errEl) errEl.style.display = 'none';
+    return;
+  }
+
+  if (digits.length < 10) {
+    input.classList.add('invalid');
+    if (errEl) errEl.style.display = 'block';
+    console.warn('[Phone] Invalid number:', input.value);
+  } else {
+    input.classList.remove('invalid');
+    if (errEl) errEl.style.display = 'none';
+    console.log('[Phone] Valid:', digits);
+  }
+}
+
+/* onchange – show event fee */
+const fees = {
+  meetup: 'Free entry ',
+  tech:   '₹199 per person',
+  green:  'Free entry',
+  food:   '₹149 per person',
+  sports: '₹99 per person',
+  music:  '₹249 per person',
+};
+
+function showFee(selectEl) {
+  const val = selectEl.value;
+  const fee = fees[val] || '';
+
+  /* Determine which display element to update */
+  const displayEl = selectEl.closest('#register')
+    ? document.getElementById('feeDisplay')
+    : document.getElementById('feedbackFeeDisplay');
+
+  if (displayEl) {
+    displayEl.textContent = val ? `Entry fee: ${fee}` : '';
+    console.log('[Fee]', val, fee);
+  }
+}
+
+/* onclick – feedback submit */
+function submitFeedback() {
+  const text = document.getElementById('fbText').value.trim();
+  const result = document.getElementById('feedbackResult');
+  console.log('[Feedback] Submitted:', text.slice(0,50));
+  result.textContent = text
+    ? 'Thank you for your feedback!'
+    : 'Please write some feedback before submitting.';
+}
+
+/* ondblclick – image enlarge / restore */
+function toggleEnlarge(img) {
+  img.classList.toggle('enlarged');
+  console.log('[Image] Enlarged:', img.classList.contains('enlarged'));
+}
+
+/* Gallery figure enlarge (Exercise 4 double-click) */
+function enlargeImg(figure) {
+  const img = figure.querySelector('img');
+  if (img) toggleEnlarge(img);
+}
+
+/* onkeyup – character counter */
+function countChars(textarea, spanId) {
+  const id  = spanId || 'charNum';
+  const len = textarea.value.length;
+  document.getElementById(id).textContent = len;
+  if (len > 300) textarea.value = textarea.value.slice(0, 300);
+  console.log('[Chars]', len);
+}
+
+
+/* ─────────────────────────────────────────
+   Exercise 7 – Media Events
+───────────────────────────────────────── */
+function videoReady() {
+  const status = document.getElementById('videoStatus');
+  status.textContent = 'Video ready to play!';
+  console.log('[Video] oncanplay fired');
+}
+
+function videoEnded() {
+  document.getElementById('videoStatus').textContent = 'Video finished. Thanks for watching!';
+  console.log('[Video] ended');
+}
+
+/* onbeforeunload – warn if form is partially filled */
+window.addEventListener('beforeunload', function(e) {
+  const name = document.getElementById('regName').value.trim();
+  if (name) {
+    const msg = 'You have an unfinished registration. Are you sure you want to leave?';
+    e.preventDefault();
+    e.returnValue = msg;
+    return msg;
+  }
+});
+
+
+/* ─────────────────────────────────────────
+   Exercise 8 – localStorage & sessionStorage
+───────────────────────────────────────── */
+function savePreference(selectEl) {
+  const val = selectEl.value;
+  if (!val) return;
+
+  localStorage.setItem('preferredEvent', val);
+  sessionStorage.setItem('sessionEvent', val);
+  console.log('[Storage] Saved preferredEvent:', val);
+  showStoredPreference();
+}
+
+function showStoredPreference() {
+  const stored = localStorage.getItem('preferredEvent');
+  const el     = document.getElementById('storedPref');
+  if (stored) {
+    el.textContent = `Saved preference: ${stored}`;
+
+    /* Pre-select the dropdown */
+    const regSelect = document.getElementById('regEvent');
+    if (regSelect) {
+      regSelect.value = stored;
+      const fakeEl = { value: stored, closest: () => document.getElementById('register') };
+      showFee({ value: stored, closest: () => document.getElementById('register') });
+    }
+  } else {
+    el.textContent = 'No saved preference yet.';
+  }
+}
+
+function clearPreferences() {
+  localStorage.clear();
+  sessionStorage.clear();
+  document.getElementById('storedPref').textContent = 'Preferences cleared.';
+  console.log('[Storage] Cleared localStorage & sessionStorage');
+}
+
+/* On page load: restore saved preference */
+window.addEventListener('DOMContentLoaded', () => {
+  showStoredPreference();
+  console.log('[Portal] CityConnect loaded ');
+});
+
+
+/* ─────────────────────────────────────────
+   Exercise 9 – Geolocation
+───────────────────────────────────────── */
+function findNearbyEvents() {
+  const resultEl = document.getElementById('geoResult');
+  resultEl.textContent = 'Detecting your location…';
+  console.log('[Geo] Requesting position…');
+
+  if (!navigator.geolocation) {
+    resultEl.textContent = 'Geolocation is not supported by your browser.';
+    return;
+  }
+
+  const options = {
+    enableHighAccuracy: true,   /* high accuracy */
+    timeout: 8000,              /* 8 s timeout   */
+    maximumAge: 0               /* no cached pos */
+  };
+
+  navigator.geolocation.getCurrentPosition(
+    /* success */
+    function(pos) {
+      const lat = pos.coords.latitude.toFixed(5);
+      const lon = pos.coords.longitude.toFixed(5);
+      const acc = pos.coords.accuracy.toFixed(1);
+      resultEl.innerHTML =
+        `Location found!<br>
+         Latitude: <span class="coord-item">${lat}</span> &nbsp;
+         Longitude: <span class="coord-item">${lon}</span><br>
+         Accuracy: ±${acc} m<br><br>
+         <strong>2 events found within 5 km</strong> – Community Meetup &amp; Tech Fair.`;
+      console.log('[Geo] Position:', lat, lon, 'accuracy:', acc, 'm');
+    },
+    /* error */
+    function(err) {
+      let msg = '';
+      switch(err.code) {
+        case err.PERMISSION_DENIED:
+          msg = 'Location access denied. Please allow location in browser settings.';
+          break;
+        case err.POSITION_UNAVAILABLE:
+          msg = '⚠ Location information unavailable.';
+          break;
+        case err.TIMEOUT:
+          msg = '⏱ Request timed out. Try again.';
+          break;
+        default:
+          msg = '❌ An unknown error occurred.';
+      }
+      resultEl.textContent = msg;
+      console.error('[Geo] Error:', err.message);
+    },
+    options
+  );
+}
+
+
+/* ─────────────────────────────────────────
+   Exercise 10 – Console demo (DevTools)
+───────────────────────────────────────── */
+function runDebugDemo() {
+  console.group('=== CityConnect DevTools Demo ===');
+  console.log('Portal title:', document.title);
+  console.log('Sections found:', document.querySelectorAll('section').length);
+  console.log('localStorage:', { ...localStorage });
+  console.log('sessionStorage:', { ...sessionStorage });
+  console.warn('⚡ This is a sample warning you can see in the Console tab.');
+  console.error('This is a sample error — check Sources > Breakpoints to pause here.');
+  console.table([
+    { exercise: 1, topic: 'HTML5 Base Template', status: 'C' },
+    { exercise: 2, topic: 'Navigation & Linking', status: 'C' },
+    { exercise: 3, topic: 'Welcome Banner',       status: 'C' },
+    { exercise: 4, topic: 'Image Gallery',        status: 'C' },
+    { exercise: 5, topic: 'Registration Form',    status: 'C' },
+    { exercise: 6, topic: 'Event Handling',       status: 'C' },
+    { exercise: 7, topic: 'Video & Media Events', status: 'C' },
+    { exercise: 8, topic: 'localStorage',         status: 'C' },
+    { exercise: 9, topic: 'Geolocation',          status: 'C' },
+    { exercise: 10,topic: 'DevTools Debugging',   status: 'C' },
+  ]);
+  console.groupEnd();
+}
+
+</script>
+
+</body>
+</html>
